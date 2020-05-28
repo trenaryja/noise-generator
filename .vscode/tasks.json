@@ -1,0 +1,21 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "debug-start",
+			"type": "npm",
+			"script": "start"
+		},
+		{
+			"label": "debug-stop",
+			"type": "process",
+			"command": ["${workbench.action.tasks.terminate}"]
+		},
+		{
+			"label": "debug-stop-example",
+			"type": "process",
+			"command": "${command:workbench.action.tasks.terminate}",
+			"args": ["debug-start"]
+		}
+	]
+}
