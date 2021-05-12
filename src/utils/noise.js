@@ -1,3 +1,5 @@
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
 const DEFAULT = {
 	DURATION: 2,
 	FREQUENCY: 250,
