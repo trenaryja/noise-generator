@@ -1,33 +1,46 @@
 {
-	"name": "noise-generator",
-	"version": "0.0.1",
-	"private": true,
+	"author": "Justin Trenary",
+	"bugs": {
+		"url": "https://github.com/trenaryja/noise-generator/issues"
+	},
 	"dependencies": {
-		"@material-ui/core": "^4.10.0",
-		"@material-ui/icons": "^4.9.1",
-		"chroma-js": "^2.1.0",
-		"react": "^16.13.1",
-		"react-dom": "^16.13.1",
-		"react-scripts": "3.4.1"
+		"@material-ui/core": "^4.11.4",
+		"@material-ui/icons": "^4.11.2",
+		"chroma-js": "^2.1.1",
+		"gatsby": "^3.5.0",
+		"gatsby-plugin-manifest": "^3.5.0",
+		"gatsby-plugin-material-ui": "^3.0.1",
+		"gatsby-plugin-react-helmet": "^4.5.0",
+		"gatsby-plugin-sass": "^4.5.0",
+		"node-sass": "^6.0.0",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"react-helmet": "^6.1.0",
+		"typeface-roboto": "^1.1.13"
+	},
+	"description": "",
+	"homepage": "https://github.com/trenaryja/noise-generator#readme",
+	"keywords": [
+		"math",
+		"chart",
+		"graph",
+		"simple",
+		"react"
+	],
+	"license": "MIT",
+	"main": "index.js",
+	"name": "noise-generator",
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/trenaryja/noise-generator.git"
 	},
 	"scripts": {
-		"start": "react-scripts start",
-		"build": "react-scripts build",
-		"eject": "react-scripts eject"
+		"build": "gatsby build",
+		"clean": "gatsby clean",
+		"develop": "gatsby develop",
+		"format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+		"start": "npm run develop"
 	},
-	"eslintConfig": {
-		"extends": "react-app"
-	},
-	"browserslist": {
-		"production": [
-			">0.2%",
-			"not dead",
-			"not op_mini all"
-		],
-		"development": [
-			"last 1 chrome version",
-			"last 1 firefox version",
-			"last 1 safari version"
-		]
-	}
+	"version": "1.0.0"
 }

@@ -1,11 +1,5 @@
-import { createMuiTheme } from "@material-ui/core";
 import chroma from "chroma-js";
-
-export const theme = createMuiTheme({
-	palette: {
-		type: "dark",
-	},
-});
+import theme from "./theme";
 
 export const bezierInterpolate = (value, r1, r2, slope) => {
 	slope = slope || 0.5;

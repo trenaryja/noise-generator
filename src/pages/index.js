@@ -1,17 +1,22 @@
 import React from "react";
-import Slider from "@material-ui/core/Slider";
-import Typography from "@material-ui/core/Typography";
-import Fab from "@material-ui/core/Fab";
-import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import PauseIcon from "@material-ui/icons/Pause";
-import Noise from "./noise";
-import * as utils from "./utils";
+import { Helmet } from "react-helmet";
+import theme from "../utils/theme";
+import {
+	Typography,
+	Slider,
+	Fab,
+	ThemeProvider,
+	CssBaseline,
+} from "@material-ui/core";
+import { PlayArrow, Pause } from "@material-ui/icons";
+import Noise from "../utils/noise";
+import * as utils from "../utils/utils";
 
 const noise = new Noise();
 const idArray = [...Array(noise.analyser.frequencyBinCount).keys()];
 const height = 25;
 
-const App = () => {
+const Index = () => {
 	const [volume, setVolume] = React.useState(0.5);
 	const [color, setColor] = React.useState(noise.filter.frequency.value);
 	const [filterQuality, setFilterQuality] = React.useState(0.5);
@@ -29,6 +34,7 @@ const App = () => {
 		noise.setGain(volume);
 		noise.setFilterQuality(filterQuality);
 	};
+
 	React.useEffect(updateNoise, [isPaused, volume, color, filterQuality]);
 
 	const plotNoise = () => {
@@ -54,50 +60,58 @@ const App = () => {
 	requestAnimationFrame(plotNoise);
 
 	return (
-		<div id="app">
-			<div id="controls">
-				<Typography>Volume</Typography>
-				<Slider
-					value={volume}
-					step={0.01}
-					min={0}
-					max={1}
-					onChange={handleVolumeChange}
-				/>
-				<Typography>Color</Typography>
-				<Slider
-					value={color}
-					step={1}
-					min={20}
-					max={23000}
-					onChange={handleColorChange}
-				/>
-				<Typography>Filter Quality</Typography>
-				<Slider
-					value={filterQuality}
-					step={0.1}
-					min={-3}
-					max={4}
-					scale={(x) => 10 ** x}
-					onChange={handleFilterQualityChange}
-				/>
-				<Fab color="primary" onClick={handlePlayPause}>
-					{isPaused ? <PlayArrowIcon /> : <PauseIcon />}
-				</Fab>
-			</div>
+		<ThemeProvider theme={theme}>
+			<Helmet>
+				<title>Noise Generator</title>
+			</Helmet>
 
-			<svg shapeRendering="crispEdges" viewBox={`0 0 100 ${height}`}>
-				{idArray.map((x) => (
-					<rect
-						width={100 / idArray.length}
-						x={(100 / idArray.length) * x}
-						id={x}
-						key={x}
-					></rect>
-				))}
-			</svg>
-		</div>
+			<div id="app">
+				<CssBaseline />
+
+				<div id="controls">
+					<Typography>Volume</Typography>
+					<Slider
+						value={volume}
+						step={0.01}
+						min={0}
+						max={1}
+						onChange={handleVolumeChange}
+					/>
+					<Typography>Color</Typography>
+					<Slider
+						value={color}
+						step={1}
+						min={20}
+						max={23000}
+						onChange={handleColorChange}
+					/>
+					<Typography>Filter Quality</Typography>
+					<Slider
+						value={filterQuality}
+						step={0.1}
+						min={-3}
+						max={4}
+						scale={(x) => 10 ** x}
+						onChange={handleFilterQualityChange}
+					/>
+					<Fab color="primary" onClick={handlePlayPause}>
+						{isPaused ? <PlayArrow /> : <Pause />}
+					</Fab>
+				</div>
+
+				<svg shapeRendering="crispEdges" viewBox={`0 0 100 ${height}`}>
+					{idArray.map((x) => (
+						<rect
+							width={100 / idArray.length}
+							x={(100 / idArray.length) * x}
+							id={x}
+							key={x}
+						></rect>
+					))}
+				</svg>
+			</div>
+		</ThemeProvider>
 	);
 };
 
-export default App;
+export default Index;
