@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Helmet } from "react-helmet";
 import theme from "../utils/theme";
 import {
@@ -12,16 +12,16 @@ import { PlayArrow, Pause } from "@material-ui/icons";
 import Noise from "../utils/noise";
 import * as utils from "../utils/utils";
 
-const noise = new Noise();
-const idArray = [...Array(noise.analyser.frequencyBinCount).keys()];
+let noise;
+let idArray;
 const height = 25;
 
 const Index = () => {
-	const [volume, setVolume] = React.useState(0.5);
-	const [color, setColor] = React.useState(noise.filter.frequency.value);
-	const [filterQuality, setFilterQuality] = React.useState(0.5);
-	const [isPaused, setIsPaused] = React.useState(true);
-	const frequencyData = React.useRef([]);
+	const [volume, setVolume] = useState(0.5);
+	const [color, setColor] = useState(250);
+	const [filterQuality, setFilterQuality] = useState(0.5);
+	const [isPaused, setIsPaused] = useState(true);
+	const frequencyData = useRef([]);
 
 	const handleVolumeChange = (_e, x) => setVolume(x);
 	const handleColorChange = (_e, x) => setColor(x);
@@ -29,35 +29,44 @@ const Index = () => {
 	const handlePlayPause = () => setIsPaused(!isPaused);
 
 	const updateNoise = () => {
-		noise.setIsPaused(isPaused);
-		noise.setColor(color);
-		noise.setGain(volume);
-		noise.setFilterQuality(filterQuality);
+		if (noise) {
+			noise.setIsPaused(isPaused);
+			noise.setColor(color);
+			noise.setGain(volume);
+			noise.setFilterQuality(filterQuality);
+		}
 	};
 
-	React.useEffect(updateNoise, [isPaused, volume, color, filterQuality]);
+	useEffect(updateNoise, [isPaused, volume, color, filterQuality]);
+
+	useEffect(() => {
+		noise = new Noise();
+		idArray = [...Array(noise.analyser.frequencyBinCount).keys()];
+		requestAnimationFrame(plotNoise);
+	}, []);
 
 	const plotNoise = () => {
-		frequencyData.current = noise.getFrequencyData();
+		if (noise) {
+			frequencyData.current = noise.getFrequencyData();
 
-		let bars = idArray.map((id) => document.getElementById(id));
-		for (let i = 0; i < bars.length; i++) {
-			const barHeight = utils.bezierInterpolate(
-				frequencyData.current[i],
-				[0, 255],
-				[0, height],
-				0.1,
-			);
-			bars[i].setAttribute("height", barHeight);
-			bars[i].setAttribute("y", (height - barHeight) / 2);
-			bars[i].setAttribute(
-				"fill",
-				utils.colorArray[frequencyData.current[i]],
-			);
+			let bars = idArray.map((id) => document.getElementById(id));
+			for (let i = 0; i < bars.length; i++) {
+				const barHeight = utils.bezierInterpolate(
+					frequencyData.current[i],
+					[0, 255],
+					[0, height],
+					0.1,
+				);
+				bars[i]?.setAttribute("height", barHeight);
+				bars[i]?.setAttribute("y", (height - barHeight) / 2);
+				bars[i]?.setAttribute(
+					"fill",
+					utils.colorArray[frequencyData.current[i]],
+				);
+			}
 		}
 		requestAnimationFrame(plotNoise);
 	};
-	requestAnimationFrame(plotNoise);
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -100,7 +109,7 @@ const Index = () => {
 				</div>
 
 				<svg shapeRendering="crispEdges" viewBox={`0 0 100 ${height}`}>
-					{idArray.map((x) => (
+					{idArray?.map((x) => (
 						<rect
 							width={100 / idArray.length}
 							x={(100 / idArray.length) * x}

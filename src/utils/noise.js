@@ -1,6 +1,4 @@
-window.AudioContext = window.AudioContext || window.webkitAudioContext;
-
-const DEFAULT = {
+export const DEFAULT = {
 	DURATION: 2,
 	FREQUENCY: 250,
 };
